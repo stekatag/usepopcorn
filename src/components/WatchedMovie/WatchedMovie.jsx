@@ -1,7 +1,6 @@
 import "./WatchedMovie.styles.scss";
 
 export default function WatchedMovie({ movie, onDeleteWatched }) {
-  console.log(movie.runtime);
   return (
     <li key={movie.imdbID}>
       <img src={movie.poster} alt={`${movie.title} poster`} />
