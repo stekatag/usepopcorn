@@ -1,10 +1,9 @@
-import { useState, useEffect, useRef } from "react";
-import { useMediaQuery } from "@uidotdev/usehooks";
-
-import StarRating from "../ui/StarRating";
+import { useState, useEffect } from "react";
 import { useKey } from "../../hooks/useKey";
 import Loader from "../Loader/Loader.component";
 import ErrorMessage from "../ErrorMessage/ErrorMessage.component";
+import MovieDetailsHeader from "../MovieDetailsHeader/MovieDetailsHeader.component";
+import MovieDetailsSection from "../MovieDetailsSection/MovieDetailsSection.component";
 import { API_KEY } from "../App";
 
 import "./MovieDetails.styles.scss";
@@ -18,51 +17,8 @@ export default function MovieDetails({
   const [movie, setMovie] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [userRating, setUserRating] = useState("");
-  const isPhone = useMediaQuery("(max-width: 37.5em)");
-  const isSmallPhone = useMediaQuery("(max-width: 22em)");
 
-  const countRef = useRef(0);
-
-  useEffect(() => {
-    if (userRating) countRef.current++;
-  }, [userRating]);
-
-  const isWatched = watched.map((movie) => movie.imdbID).includes(selectedId);
-  const watchedUserRating = watched.find(
-    (movie) => movie.imdbID === selectedId
-  )?.userRating;
-
-  const {
-    Title: title,
-    Year: year,
-    Poster: poster,
-    Runtime: runtime,
-    imdbRating,
-    Plot: plot,
-    Released: released,
-    Actors: actors,
-    Director: director,
-    Genre: genre,
-  } = movie;
-
-  function handleAdd() {
-    const newWatchedMovie = {
-      imdbID: selectedId,
-      title,
-      year,
-      poster,
-      imdbRating: Number(imdbRating),
-      runtime: Number(runtime.split(" ").at(0)),
-      userRating,
-      countRatingDecisions: countRef.current,
-    };
-
-    onAddWatched(newWatchedMovie);
-    onCloseMovie();
-    // setAvgRating(Number(imdbRating));
-    // setAvgRating((avgRating) => (avgRating + userRating) / 2);
-  }
+  const { Title: title } = movie;
 
   useKey("Escape", onCloseMovie);
 
@@ -104,52 +60,14 @@ export default function MovieDetails({
       {isLoading && <Loader />}
       {!isLoading && !error && (
         <>
-          <header>
-            <button className="btn-back" onClick={onCloseMovie}>
-              &larr;
-            </button>
-            <img src={poster} alt={`Poster of ${movie}`} />
-            <div className="details-overview">
-              <h2>{title}</h2>
-              <p>
-                {released} &bull; {runtime}
-              </p>
-              <p>{genre}</p>
-              <p>
-                <span>⭐</span>
-                {imdbRating} IMDb Rating
-              </p>
-            </div>
-          </header>
-
-          <section>
-            <div className="rating">
-              {!isWatched ? (
-                <>
-                  <StarRating
-                    maxRating={10}
-                    size={isSmallPhone ? 18 : isPhone ? 21 : 26}
-                    onSetRating={setUserRating}
-                  />
-                  {userRating > 0 && (
-                    <button className="btn-add" onClick={handleAdd}>
-                      + Add to list
-                    </button>
-                  )}
-                </>
-              ) : (
-                <p>
-                  You already rated this movie with {watchedUserRating}
-                  <span>⭐</span>
-                </p>
-              )}
-            </div>
-            <p>
-              <em>{plot}</em>
-            </p>
-            <p>Starring {actors}</p>
-            <p>Directed by {director}</p>
-          </section>
+          <MovieDetailsHeader movie={movie} onCloseMovie={onCloseMovie} />
+          <MovieDetailsSection
+            selectedId={selectedId}
+            movie={movie}
+            onCloseMovie={onCloseMovie}
+            watched={watched}
+            onAddWatched={onAddWatched}
+          />
         </>
       )}
       {error && <ErrorMessage message={error} />}
