@@ -12,8 +12,8 @@
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s;
-}
 
-.btn-delete:hover {
-  background-color: var(--color-red-dark);
+  &:hover {
+    background-color: var(--color-red-dark);
+  }
 }
