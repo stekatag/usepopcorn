@@ -3,6 +3,8 @@ import { useMediaQuery } from "@uidotdev/usehooks";
 
 import StarRating from "../ui/StarRating";
 
+import "./MovieDetailsSection.styles.scss";
+
 export default function MovieDetailsSection({
   selectedId,
   movie,

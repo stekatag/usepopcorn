@@ -1,3 +1,5 @@
+import "./MovieDetailsHeader.styles.scss";
+
 export default function MovieDetailsHeader({ movie, onCloseMovie }) {
   const {
     Title: title,
