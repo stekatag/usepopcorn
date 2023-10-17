@@ -8,7 +8,13 @@ export default function WatchedMovie({ movie, onDeleteWatched }) {
       <div>
         <p>
           <span>⭐️</span>
-          <span>{movie.imdbRating}</span>
+          <span>
+            {!movie.imdbRating ? (
+              <span>N/A rating</span>
+            ) : (
+              `${movie.imdbRating}`
+            )}
+          </span>
         </p>
         <p>
           <span>🌟</span>
